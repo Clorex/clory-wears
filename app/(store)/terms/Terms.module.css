@@ -1,0 +1,159 @@
+.wrap {
+  min-height: 60vh;
+}
+
+.hero {
+  padding: 34px 0 18px;
+  background: radial-gradient(
+      1100px 420px at 15% 10%,
+      rgba(233, 30, 99, 0.14),
+      rgba(255, 255, 255, 0)
+    ),
+    radial-gradient(
+      900px 420px at 95% 20%,
+      rgba(194, 24, 91, 0.12),
+      rgba(255, 255, 255, 0)
+    );
+  border-bottom: 1px solid rgba(194, 24, 91, 0.10);
+}
+
+.heroInner {
+  display: grid;
+  grid-template-columns: 1fr 0.55fr;
+  gap: 16px;
+  align-items: start;
+}
+
+.badgeRow {
+  margin-bottom: 10px;
+}
+
+.h1 {
+  font-size: clamp(2rem, 3.6vw, 2.7rem);
+  line-height: 1.05;
+  font-weight: 950;
+  letter-spacing: -0.06em;
+  margin: 0 0 10px 0;
+}
+
+.sub {
+  color: rgba(27, 27, 27, 0.74);
+  font-weight: 650;
+  max-width: 78ch;
+}
+
+.ctas {
+  margin-top: 14px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.side {
+  position: sticky;
+  top: 92px;
+}
+
+.sideCard {
+  padding: 14px;
+}
+
+.sideTitle {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 950;
+  letter-spacing: -0.04em;
+  font-size: 1.15rem;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(194, 24, 91, 0.10);
+  margin-bottom: 12px;
+  color: #c2185b;
+}
+
+.tips {
+  margin: 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 8px;
+  color: rgba(27, 27, 27, 0.72);
+  font-weight: 700;
+}
+
+.card {
+  padding: 18px;
+  max-width: 980px;
+}
+
+.cardTitle {
+  margin-top: 14px;
+  font-weight: 950;
+  letter-spacing: -0.03em;
+  color: rgba(27, 27, 27, 0.88);
+}
+
+.cardTitle:first-of-type {
+  margin-top: 0;
+}
+
+.p {
+  margin-top: 8px;
+  color: rgba(27, 27, 27, 0.74);
+  font-weight: 650;
+}
+
+.p a {
+  color: #c2185b;
+  font-weight: 900;
+}
+
+.payBox {
+  margin-top: 12px;
+  border-radius: 18px;
+  border: 1px dashed rgba(233, 30, 99, 0.32);
+  background: rgba(233, 30, 99, 0.06);
+  padding: 14px;
+}
+
+.payTitle {
+  font-weight: 950;
+  color: #c2185b;
+  letter-spacing: -0.03em;
+  margin-bottom: 10px;
+}
+
+.payLine {
+  display: flex;
+  gap: 10px;
+  padding: 4px 0;
+  font-weight: 850;
+  color: rgba(27, 27, 27, 0.78);
+}
+
+.k {
+  width: 130px;
+  color: rgba(27, 27, 27, 0.58);
+  font-weight: 900;
+}
+
+.small {
+  margin-top: 16px;
+  color: rgba(27, 27, 27, 0.62);
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+@media (max-width: 980px) {
+  .heroInner {
+    grid-template-columns: 1fr;
+  }
+  .side {
+    position: static;
+  }
+}
+
+@media (max-width: 640px) {
+  .k {
+    width: 120px;
+  }
+}

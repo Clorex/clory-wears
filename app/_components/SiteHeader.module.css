@@ -1,0 +1,227 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+
+  background: rgba(255, 255, 255, 0.82);
+  border-bottom: 1px solid rgba(194, 24, 91, 0.12);
+  backdrop-filter: blur(10px);
+}
+
+.inner {
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 190px;
+}
+
+.brandMark {
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #c2185b, #e91e63);
+  box-shadow: 0 14px 30px rgba(233, 30, 99, 0.28);
+}
+
+.brandText {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  line-height: 1;
+}
+
+.brandName {
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  font-size: 1.15rem;
+  color: #1b1b1b;
+}
+
+.brandWears {
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  font-size: 1.15rem;
+  color: #c2185b;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  flex: 1;
+}
+
+.navLink {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 12px;
+  border-radius: 999px;
+  font-weight: 800;
+  font-size: 0.95rem;
+  color: rgba(27, 27, 27, 0.74);
+  transition: background 160ms ease, color 160ms ease, transform 160ms ease;
+}
+
+.navLink:hover {
+  background: rgba(233, 30, 99, 0.08);
+  color: #c2185b;
+}
+
+.navLink:active {
+  transform: translateY(1px);
+}
+
+.navLinkActive {
+  background: rgba(233, 30, 99, 0.12);
+  color: #c2185b;
+  border: 1px solid rgba(233, 30, 99, 0.22);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  min-width: 240px;
+}
+
+.iconBtn {
+  position: relative;
+  height: 42px;
+  width: 46px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 999px;
+  border: 1px solid rgba(233, 30, 99, 0.18);
+  background: rgba(233, 30, 99, 0.06);
+
+  transition: background 160ms ease, border-color 160ms ease, transform 160ms ease;
+}
+
+.iconBtn:hover {
+  background: rgba(233, 30, 99, 0.1);
+  border-color: rgba(233, 30, 99, 0.26);
+}
+
+.iconBtn:active {
+  transform: translateY(1px);
+}
+
+.cartCount {
+  position: absolute;
+  top: -8px;
+  right: -6px;
+
+  min-width: 22px;
+  height: 22px;
+  padding: 0 7px;
+
+  border-radius: 999px;
+  background: linear-gradient(135deg, #c2185b, #e91e63);
+  color: #fff;
+  font-weight: 900;
+  font-size: 0.78rem;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  box-shadow: 0 16px 32px rgba(233, 30, 99, 0.26);
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 10px 12px;
+  border-radius: 999px;
+
+  border: 1px solid rgba(233, 30, 99, 0.18);
+  background: rgba(255, 255, 255, 0.7);
+
+  font-weight: 900;
+  font-size: 0.92rem;
+  color: rgba(27, 27, 27, 0.78);
+
+  transition: background 160ms ease, border-color 160ms ease, transform 160ms ease;
+}
+
+.pill:hover {
+  background: rgba(233, 30, 99, 0.06);
+  border-color: rgba(233, 30, 99, 0.25);
+}
+
+.pill:active {
+  transform: translateY(1px);
+}
+
+.pillText {
+  display: inline-block;
+}
+
+.pillButton {
+  cursor: pointer;
+}
+
+.mobileNav {
+  min-width: 180px;
+}
+
+.mobileLabel {
+  position: absolute;
+  left: -9999px;
+  top: -9999px;
+}
+
+.mobileSelect {
+  height: 44px;
+  border-radius: 999px;
+  padding: 10px 12px;
+}
+
+/* Responsive fine-tuning */
+@media (max-width: 860px) {
+  .inner {
+    height: auto;
+    padding: 12px 0;
+    align-items: flex-start;
+  }
+
+  .brand {
+    min-width: unset;
+  }
+
+  .actions {
+    min-width: unset;
+  }
+
+  .pillText {
+    display: none; /* icons remain */
+  }
+}
+
+@media (max-width: 420px) {
+  .actions {
+    gap: 8px;
+  }
+
+  .iconBtn {
+    width: 44px;
+  }
+
+  .mobileNav {
+    width: 100%;
+  }
+}

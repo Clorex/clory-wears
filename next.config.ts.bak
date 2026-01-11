@@ -1,0 +1,30 @@
+/** @type {import("next").NextConfig} */
+const nextConfig = {
+  reactStrictMode: true,
+  poweredByHeader: false,
+
+  images: {
+    remotePatterns: (() => {
+      try {
+        const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+        if (!supabaseUrl) return [];
+
+        const { hostname } = new URL(supabaseUrl);
+
+        // Supabase public storage URLs look like:
+        // https://<project-ref>.supabase.co/storage/v1/object/public/receipts/...
+        return [
+          {
+            protocol: "https",
+            hostname,
+            pathname: "/storage/v1/object/public/**"
+          }
+        ];
+      } catch {
+        return [];
+      }
+    })()
+  }
+};
+
+export default nextConfig;
