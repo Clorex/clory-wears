@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
@@ -21,7 +23,9 @@ export default function ProductCard({ product }: { product: Product }) {
         />
 
         <div className={styles.tagRow}>
-          <span className={styles.tag}>{product.category === "trousers" ? "Trousers" : "Shirt"}</span>
+          <span className={styles.tag}>
+            {product.category === "trousers" ? "Trousers" : "Shirt"}
+          </span>
           <span className={styles.tagAlt}>{formatNgn(product.priceNgn)}</span>
         </div>
       </div>
@@ -39,11 +43,15 @@ export default function ProductCard({ product }: { product: Product }) {
         <div className={styles.meta}>
           <div className={styles.metaLine}>
             <span className={styles.metaKey}>Colors:</span>{" "}
-            <span className={styles.metaVal}>{product.colors.slice(0, 3).join(", ")}</span>
+            <span className={styles.metaVal}>
+              {product.colors.slice(0, 3).join(", ")}
+            </span>
           </div>
           <div className={styles.metaLine}>
             <span className={styles.metaKey}>Sizes:</span>{" "}
-            <span className={styles.metaVal}>{product.sizes.slice(0, 5).join(", ")}</span>
+            <span className={styles.metaVal}>
+              {product.sizes.slice(0, 5).join(", ")}
+            </span>
           </div>
         </div>
 
