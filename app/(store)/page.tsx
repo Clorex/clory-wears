@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, BadgeCheck, Truck, WalletCards } from "lucide-react";
-
+import ClientBoundary from "./_components/ClientBoundary";
 import styles from "./Home.module.css";
 import { SEED_PRODUCTS } from "../_data/seedProducts";
 import ProductCard from "../_components/ProductCard";
@@ -20,6 +20,7 @@ export default function HomePage() {
   const maxPrice = Math.max(...SEED_PRODUCTS.map((p) => p.priceNgn));
 
   return (
+    <ClientBoundary>
     <>
       {/* HERO */}
       <section className={styles.hero}>
@@ -237,5 +238,6 @@ export default function HomePage() {
         </div>
       </section>
     </>
+    </ClientBoundary>
   );
 }
