@@ -6,7 +6,7 @@
   overflow: hidden;
 
   border: 1px solid rgba(194, 24, 91, 0.14);
-  background: rgba(255, 255, 255, 0.86);
+  background: rgba(255, 255, 255, 0.90);
   box-shadow: 0 18px 45px rgba(194, 24, 91, 0.10);
 
   transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
@@ -14,7 +14,7 @@
 
 .card:hover {
   transform: translateY(-3px);
-  border-color: rgba(233, 30, 99, 0.26);
+  border-color: rgba(233, 30, 99, 0.24);
   box-shadow: 0 22px 60px rgba(194, 24, 91, 0.14);
 }
 
@@ -54,10 +54,10 @@
   padding: 8px 10px;
   border-radius: 999px;
 
-  background: rgba(255, 255, 255, 0.84);
+  background: rgba(255, 255, 255, 0.86);
   border: 1px solid rgba(233, 30, 99, 0.18);
-  color: rgba(27, 27, 27, 0.72);
-  font-weight: 900;
+  color: rgba(25, 25, 25, 0.70);
+  font-weight: 650;
   font-size: 0.86rem;
   backdrop-filter: blur(10px);
 }
@@ -71,9 +71,9 @@
   background: linear-gradient(135deg, rgba(194, 24, 91, 0.95), rgba(233, 30, 99, 0.92));
   border: 1px solid rgba(233, 30, 99, 0.18);
   color: #fff;
-  font-weight: 950;
+  font-weight: 750;
   font-size: 0.86rem;
-  box-shadow: 0 16px 34px rgba(233, 30, 99, 0.22);
+  box-shadow: 0 16px 34px rgba(233, 30, 99, 0.20);
 }
 
 .body {
@@ -90,10 +90,11 @@
 }
 
 .title {
-  font-weight: 950;
+  font-weight: 800; /* reduced from very heavy */
   letter-spacing: -0.04em;
-  font-size: 1.05rem;
-  line-height: 1.15;
+  font-size: 1.02rem;
+  line-height: 1.18;
+  color: rgba(25, 25, 25, 0.92);
 }
 
 .icon {
@@ -111,15 +112,16 @@
 }
 
 .subtitle {
-  color: rgba(27, 27, 27, 0.72);
-  font-weight: 700;
+  color: rgba(25, 25, 25, 0.72);
+  font-weight: 450;
   font-size: 0.95rem;
+  line-height: 1.6;
 }
 
 .meta {
   display: grid;
   gap: 6px;
-  padding-top: 6px;
+  padding-top: 10px;
   border-top: 1px solid rgba(194, 24, 91, 0.10);
 }
 
@@ -131,14 +133,14 @@
 }
 
 .metaKey {
-  color: rgba(27, 27, 27, 0.58);
-  font-weight: 900;
+  color: rgba(25, 25, 25, 0.58);
+  font-weight: 650;
   font-size: 0.9rem;
 }
 
 .metaVal {
-  color: rgba(27, 27, 27, 0.78);
-  font-weight: 800;
+  color: rgba(25, 25, 25, 0.76);
+  font-weight: 450;
   font-size: 0.9rem;
 }
 
@@ -150,7 +152,7 @@
 }
 
 .cta {
-  font-weight: 950;
+  font-weight: 700;
   color: #c2185b;
   letter-spacing: -0.02em;
   font-size: 0.95rem;
@@ -160,5 +162,8 @@
 @media (max-width: 520px) {
   .card {
     grid-template-rows: 210px 1fr;
+  }
+  .body {
+    padding: 13px 13px 15px;
   }
 }

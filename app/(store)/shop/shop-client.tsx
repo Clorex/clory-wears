@@ -17,8 +17,7 @@ function sortProducts(items: Product[], sort: SortKey): Product[] {
   if (sort === "price-desc") return arr.sort((a, b) => b.priceNgn - a.priceNgn);
   if (sort === "name-asc") return arr.sort((a, b) => a.name.localeCompare(b.name));
 
-  // featured: keep original seed order (curated feel)
-  return arr;
+  return arr; // featured: curated seed order
 }
 
 export default function ShopClient() {
@@ -72,8 +71,8 @@ export default function ShopClient() {
 
             <h1 className={styles.h1}>Shop CLORY WEARS</h1>
             <p className={styles.sub}>
-              Browse the full catalog. Choose your size and color on each product page, add to cart,
-              then checkout to get payment instructions and upload your receipt.
+              Explore premium trousers and shirts designed for clean looks and confident fits.
+              Choose your size and color on the product page, add to cart, and proceed to checkout when ready.
             </p>
           </div>
 
@@ -154,7 +153,7 @@ export default function ShopClient() {
               </button>
 
               <div className={styles.miniNote}>
-                Payments are via <b>OPay transfer</b>, then receipt upload at checkout.
+                Clean essentials. Premium finishing. Built for confident wear.
               </div>
             </div>
           </div>

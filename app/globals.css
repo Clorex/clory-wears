@@ -4,8 +4,8 @@
   --white: #ffffff;
 
   --bg: #ffffff;
-  --text: #1b1b1b;
-  --muted: #6b6b6b;
+  --text: #191919;
+  --muted: rgba(25, 25, 25, 0.68);
 
   --border: rgba(194, 24, 91, 0.18);
   --shadow: 0 18px 45px rgba(194, 24, 91, 0.12);
@@ -15,6 +15,20 @@
   --radius-sm: 12px;
 
   --container: 1120px;
+
+  /* font weights (use these instead of 950 everywhere) */
+  --fw-regular: 450;
+  --fw-medium: 550;
+  --fw-semibold: 650;
+  --fw-bold: 750;
+  --fw-xbold: 850;
+
+  /* rhythm */
+  --space-1: 6px;
+  --space-2: 10px;
+  --space-3: 14px;
+  --space-4: 18px;
+  --space-5: 24px;
 }
 
 /* Better defaults */
@@ -43,27 +57,32 @@ textarea {
 
 /* Typography */
 body {
-  font-family: var(--font-body, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica,
-      Arial, "Apple Color Emoji", "Segoe UI Emoji");
-  line-height: 1.5;
+  font-family: var(--font-body, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial);
+  line-height: 1.55;
   letter-spacing: -0.01em;
+  font-weight: var(--fw-regular);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
+/* Headings: strong but not shouting */
 h1,
 h2,
 h3,
 h4,
 h5,
 h6 {
-  font-family: var(--font-head, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica,
-      Arial);
-  letter-spacing: -0.03em;
+  font-family: var(--font-head, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial);
+  letter-spacing: -0.04em;
   margin: 0 0 0.35rem 0;
+  font-weight: var(--fw-xbold);
+  line-height: 1.08;
 }
 
 p {
   margin: 0 0 1rem 0;
-  color: rgba(27, 27, 27, 0.86);
+  color: rgba(25, 25, 25, 0.82);
+  font-weight: var(--fw-regular);
 }
 
 /* Layout helpers */
@@ -76,6 +95,12 @@ p {
 
 .section {
   padding: 56px 0;
+}
+
+@media (max-width: 600px) {
+  .section {
+    padding: 40px 0;
+  }
 }
 
 .card {
@@ -93,7 +118,7 @@ p {
   margin: 22px 0;
 }
 
-/* Buttons */
+/* Buttons (FINAL: calmer weight + better mobile sizing) */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -102,9 +127,12 @@ p {
 
   border: 1px solid transparent;
   border-radius: 999px;
-  padding: 12px 16px;
+  padding: 11px 15px;
 
-  font-weight: 700;
+  font-weight: 600;          /* was too bold */
+  font-size: 0.98rem;        /* slightly calmer */
+  letter-spacing: -0.01em;
+
   cursor: pointer;
   user-select: none;
 
@@ -118,10 +146,10 @@ p {
 .btnPrimary {
   background: linear-gradient(135deg, var(--pink-900), var(--pink-700));
   color: var(--white);
-  box-shadow: 0 16px 36px rgba(233, 30, 99, 0.28);
+  box-shadow: 0 16px 36px rgba(233, 30, 99, 0.26);
 }
 .btnPrimary:hover {
-  box-shadow: 0 18px 45px rgba(233, 30, 99, 0.36);
+  box-shadow: 0 18px 45px rgba(233, 30, 99, 0.32);
 }
 
 .btnGhost {
@@ -139,7 +167,15 @@ p {
   color: var(--pink-900);
 }
 
-/* Form controls */
+@media (max-width: 520px) {
+  .btn {
+    padding: 10px 14px;
+    font-size: 0.95rem;
+    gap: 8px;
+  }
+}
+
+/* Form controls (improved + consistent on mobile) */
 .input,
 .select,
 .textarea {
@@ -147,9 +183,31 @@ p {
   padding: 12px 12px;
   border-radius: 12px;
   border: 1px solid rgba(194, 24, 91, 0.22);
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.92);
   outline: none;
-  transition: box-shadow 160ms ease, border-color 160ms ease;
+  transition: box-shadow 160ms ease, border-color 160ms ease, background 160ms ease;
+  font-weight: var(--fw-regular);
+  color: rgba(25, 25, 25, 0.92);
+}
+
+/* Make SELECTs look branded on mobile */
+.select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  padding-right: 40px;
+
+  background-image:
+    linear-gradient(135deg, rgba(194, 24, 91, 0.95), rgba(233, 30, 99, 0.92)),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat, no-repeat;
+  background-size: 0px 0px, 18px 18px;
+  background-position: right 12px center, right 12px center;
+}
+
+.select::-ms-expand {
+  display: none;
 }
 
 .input:focus,
@@ -157,21 +215,24 @@ p {
 .textarea:focus {
   border-color: rgba(233, 30, 99, 0.65);
   box-shadow: 0 0 0 6px rgba(233, 30, 99, 0.12);
+  background: rgba(255, 255, 255, 1);
 }
 
 .label {
   display: block;
   font-size: 0.92rem;
   margin: 0 0 8px 0;
-  color: rgba(27, 27, 27, 0.72);
+  color: rgba(25, 25, 25, 0.72);
+  font-weight: var(--fw-semibold);
 }
 
 .helper {
   font-size: 0.9rem;
-  color: rgba(27, 27, 27, 0.64);
+  color: rgba(25, 25, 25, 0.62);
+  font-weight: var(--fw-regular);
 }
 
-/* Badges */
+/* Badges (calmer) */
 .badge {
   display: inline-flex;
   align-items: center;
@@ -183,7 +244,7 @@ p {
   background: rgba(233, 30, 99, 0.08);
   border: 1px solid rgba(233, 30, 99, 0.20);
   color: var(--pink-900);
-  font-weight: 700;
+  font-weight: 600;
   font-size: 0.9rem;
 }
 
@@ -205,7 +266,7 @@ p {
   }
 }
 
-/* Mobile nav dropdown helpers (we’ll use later) */
+/* Mobile nav dropdown helpers */
 .mobileOnly {
   display: none;
 }

@@ -2,7 +2,7 @@
 
 import React, { useMemo, useState } from "react";
 import Link from "next/link";
-import { ArrowRight, Mail, MessageSquareText, Phone, Send } from "lucide-react";
+import { ArrowRight, Mail, MessageSquareText, Send, Clock } from "lucide-react";
 
 import { useAuth } from "../../_providers/AuthProvider";
 import { useToast } from "../../_providers/ToastProvider";
@@ -95,7 +95,7 @@ export default function ContactClient() {
 
             <h1 className={styles.h1}>Contact</h1>
             <p className={styles.sub}>
-              Questions about sizes, delivery, payment upload, or your order reference? Send a message and we’ll respond.
+              Need help with sizing, delivery, product details, or an existing order? Send a message and we’ll respond.
             </p>
 
             <div className={styles.quick}>
@@ -106,9 +106,9 @@ export default function ContactClient() {
                 </span>
               </div>
               <div className={styles.quickItem}>
-                <Phone size={18} />
+                <Clock size={18} />
                 <span>
-                  OPay: <b>8059086041</b> (Itabita Miracle)
+                  Support: <b>Response within 24 hours</b>
                 </span>
               </div>
             </div>
@@ -127,7 +127,7 @@ export default function ContactClient() {
                 Terms <ArrowRight size={16} />
               </Link>
               <div className={styles.sideNote}>
-                If you already placed an order, include your <b>order reference</b> in your message for faster support.
+                If you already placed an order, include your <b>order reference</b> for faster support.
               </div>
             </div>
           </div>
@@ -208,7 +208,7 @@ export default function ContactClient() {
             </div>
 
             <div className={styles.note}>
-              We do not store your contact message publicly; it is sent directly to our support email.
+              We do not store your contact message publicly; it is sent directly to our support inbox.
             </div>
           </div>
         </div>

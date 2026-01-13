@@ -3,15 +3,15 @@
 }
 
 .hero {
-  padding: 34px 0 18px;
+  padding: 28px 0 16px;
   background: radial-gradient(
       1100px 420px at 15% 10%,
-      rgba(233, 30, 99, 0.14),
+      rgba(233, 30, 99, 0.12),
       rgba(255, 255, 255, 0)
     ),
     radial-gradient(
       900px 420px at 95% 20%,
-      rgba(194, 24, 91, 0.12),
+      rgba(194, 24, 91, 0.10),
       rgba(255, 255, 255, 0)
     );
   border-bottom: 1px solid rgba(194, 24, 91, 0.10);
@@ -32,23 +32,24 @@
 }
 
 .h1 {
-  font-size: clamp(2rem, 3.6vw, 2.7rem);
-  line-height: 1.05;
-  font-weight: 950;
+  font-size: clamp(1.9rem, 3.4vw, 2.55rem);
+  line-height: 1.06;
+  font-weight: 850;
   letter-spacing: -0.06em;
   margin: 0 0 10px 0;
 }
 
 .sub {
-  color: rgba(27, 27, 27, 0.74);
-  font-weight: 650;
+  color: rgba(25, 25, 25, 0.74);
+  font-weight: 450;
+  line-height: 1.7;
   max-width: 78ch;
 }
 
 .topPanel {
   border-radius: 20px;
   border: 1px solid rgba(194, 24, 91, 0.14);
-  background: rgba(255, 255, 255, 0.78);
+  background: rgba(255, 255, 255, 0.82);
   box-shadow: 0 18px 45px rgba(194, 24, 91, 0.10);
   padding: 14px;
   display: grid;
@@ -56,9 +57,9 @@
 }
 
 .topTitle {
-  font-weight: 950;
+  font-weight: 800;
   letter-spacing: -0.04em;
-  color: rgba(27, 27, 27, 0.86);
+  color: rgba(25, 25, 25, 0.86);
   margin-bottom: 4px;
 }
 
@@ -79,14 +80,14 @@
 }
 
 .filtersTitle {
-  font-weight: 950;
+  font-weight: 850;
   letter-spacing: -0.04em;
-  font-size: 1.15rem;
+  font-size: 1.1rem;
 }
 
 .filtersCount {
-  font-weight: 850;
-  color: rgba(27, 27, 27, 0.70);
+  font-weight: 450;
+  color: rgba(25, 25, 25, 0.70);
 }
 
 .filtersGrid {
@@ -128,8 +129,9 @@
 }
 
 .smallNote {
-  color: rgba(27, 27, 27, 0.68);
-  font-weight: 650;
+  color: rgba(25, 25, 25, 0.68);
+  font-weight: 450;
+  line-height: 1.6;
 }
 
 /* Notices */
@@ -141,17 +143,18 @@
 }
 
 .noticeTitle {
-  font-weight: 950;
+  font-weight: 850;
   letter-spacing: -0.03em;
-  color: rgba(27, 27, 27, 0.92);
+  color: rgba(25, 25, 25, 0.92);
   display: inline-flex;
   align-items: center;
   gap: 10px;
 }
 
 .noticeText {
-  color: rgba(27, 27, 27, 0.72);
-  font-weight: 650;
+  color: rgba(25, 25, 25, 0.72);
+  font-weight: 450;
+  line-height: 1.6;
 }
 
 .noticeCtas {
@@ -220,10 +223,10 @@
 }
 
 .ref {
-  font-weight: 980;
+  font-weight: 850;
   letter-spacing: -0.04em;
-  font-size: 1.1rem;
-  color: rgba(27, 27, 27, 0.92);
+  font-size: 1.05rem;
+  color: rgba(25, 25, 25, 0.92);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -255,8 +258,9 @@
 }
 
 .small {
-  color: rgba(27, 27, 27, 0.68);
-  font-weight: 700;
+  color: rgba(25, 25, 25, 0.68);
+  font-weight: 450;
+  line-height: 1.6;
 }
 
 .status {
@@ -270,7 +274,7 @@
   border: 1px solid rgba(233, 30, 99, 0.18);
   background: rgba(233, 30, 99, 0.06);
 
-  font-weight: 950;
+  font-weight: 650;
   letter-spacing: -0.02em;
   width: fit-content;
 }
@@ -283,12 +287,12 @@
 .toneWarn {
   border-color: rgba(233, 30, 99, 0.22);
   background: rgba(233, 30, 99, 0.08);
-  color: rgba(27, 27, 27, 0.78);
+  color: rgba(25, 25, 25, 0.78);
 }
 .toneInfo {
   border-color: rgba(233, 30, 99, 0.22);
   background: rgba(233, 30, 99, 0.07);
-  color: rgba(27, 27, 27, 0.78);
+  color: rgba(25, 25, 25, 0.78);
 }
 .toneBad {
   border-color: rgba(194, 24, 91, 0.28);
@@ -299,7 +303,7 @@
 .right {
   border-radius: 18px;
   border: 1px solid rgba(194, 24, 91, 0.12);
-  background: rgba(255, 255, 255, 0.72);
+  background: rgba(255, 255, 255, 0.78);
   padding: 12px;
   display: grid;
   gap: 8px;
@@ -310,21 +314,21 @@
   align-items: baseline;
   justify-content: space-between;
   gap: 12px;
-  font-weight: 900;
+  font-weight: 550;
 }
 
 .k {
-  color: rgba(27, 27, 27, 0.62);
+  color: rgba(25, 25, 25, 0.62);
 }
 
 .v {
-  color: rgba(27, 27, 27, 0.82);
-  font-weight: 950;
+  color: rgba(25, 25, 25, 0.82);
+  font-weight: 650;
 }
 
 .vPink {
   color: #c2185b;
-  font-weight: 980;
+  font-weight: 850;
   letter-spacing: -0.02em;
 }
 
@@ -339,7 +343,7 @@
 .block {
   border-radius: 18px;
   border: 1px solid rgba(194, 24, 91, 0.12);
-  background: rgba(255, 255, 255, 0.72);
+  background: rgba(255, 255, 255, 0.78);
   padding: 12px;
 }
 
@@ -347,25 +351,26 @@
   grid-column: 1 / -1;
   border-radius: 18px;
   border: 1px solid rgba(194, 24, 91, 0.12);
-  background: rgba(255, 255, 255, 0.72);
+  background: rgba(255, 255, 255, 0.78);
   padding: 12px;
 }
 
 .blockTitle {
-  font-weight: 950;
-  letter-spacing: -0.03em;
+  font-weight: 750;
+  letter-spacing: -0.02em;
   margin-bottom: 8px;
-  color: rgba(27, 27, 27, 0.86);
+  color: rgba(25, 25, 25, 0.86);
 }
 
 .blockText {
-  color: rgba(27, 27, 27, 0.72);
-  font-weight: 650;
+  color: rgba(25, 25, 25, 0.72);
+  font-weight: 450;
+  line-height: 1.6;
 }
 
 .note {
-  color: rgba(27, 27, 27, 0.68);
-  font-weight: 750;
+  color: rgba(25, 25, 25, 0.68);
+  font-weight: 500;
 }
 
 .receiptRow {
@@ -379,7 +384,7 @@
 
 .receiptLink {
   color: #c2185b;
-  font-weight: 950;
+  font-weight: 700;
   letter-spacing: -0.02em;
   display: inline-flex;
   align-items: center;
@@ -396,8 +401,9 @@
 
 .helpText {
   margin-top: 10px;
-  color: rgba(27, 27, 27, 0.68);
-  font-weight: 650;
+  color: rgba(25, 25, 25, 0.68);
+  font-weight: 450;
+  line-height: 1.6;
 }
 
 .items {
@@ -416,20 +422,21 @@
 }
 
 .itemName {
-  font-weight: 950;
-  letter-spacing: -0.02em;
-  color: rgba(27, 27, 27, 0.82);
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  color: rgba(25, 25, 25, 0.82);
 }
 
 .itemMeta {
-  color: rgba(27, 27, 27, 0.66);
-  font-weight: 750;
-  font-size: 0.9rem;
+  color: rgba(25, 25, 25, 0.66);
+  font-weight: 450;
+  font-size: 0.92rem;
+  line-height: 1.45;
 }
 
 .itemPrice {
   justify-self: end;
-  font-weight: 950;
+  font-weight: 750;
   color: #c2185b;
 }
 
@@ -439,8 +446,8 @@
   border-radius: 16px;
   border: 1px dashed rgba(233, 30, 99, 0.28);
   background: rgba(233, 30, 99, 0.06);
-  color: rgba(27, 27, 27, 0.78);
-  font-weight: 800;
+  color: rgba(25, 25, 25, 0.78);
+  font-weight: 550;
 }
 
 @media (max-width: 980px) {
@@ -458,5 +465,27 @@
   }
   .ref {
     max-width: 40ch;
+  }
+}
+
+@media (max-width: 520px) {
+  .hero {
+    padding: 22px 0 12px;
+  }
+
+  .h1 {
+    font-size: clamp(1.65rem, 7vw, 2.1rem);
+  }
+
+  .topPanel {
+    padding: 12px;
+  }
+
+  .filters {
+    padding: 12px;
+  }
+
+  .orderCard {
+    padding: 12px;
   }
 }

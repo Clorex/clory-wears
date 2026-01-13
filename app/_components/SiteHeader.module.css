@@ -3,7 +3,7 @@
   top: 0;
   z-index: 50;
 
-  background: rgba(255, 255, 255, 0.82);
+  background: rgba(255, 255, 255, 0.86);
   border-bottom: 1px solid rgba(194, 24, 91, 0.12);
   backdrop-filter: blur(10px);
 }
@@ -28,7 +28,7 @@
   height: 14px;
   border-radius: 999px;
   background: linear-gradient(135deg, #c2185b, #e91e63);
-  box-shadow: 0 14px 30px rgba(233, 30, 99, 0.28);
+  box-shadow: 0 14px 30px rgba(233, 30, 99, 0.22);
 }
 
 .brandText {
@@ -39,16 +39,16 @@
 }
 
 .brandName {
-  font-weight: 800;
+  font-weight: 850;
   letter-spacing: -0.05em;
-  font-size: 1.15rem;
+  font-size: 1.05rem;
   color: #1b1b1b;
 }
 
 .brandWears {
-  font-weight: 800;
+  font-weight: 850;
   letter-spacing: -0.05em;
-  font-size: 1.15rem;
+  font-size: 1.05rem;
   color: #c2185b;
 }
 
@@ -56,7 +56,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 14px;
+  gap: 10px;
   flex: 1;
 }
 
@@ -65,9 +65,9 @@
   align-items: center;
   padding: 10px 12px;
   border-radius: 999px;
-  font-weight: 800;
+  font-weight: 750;
   font-size: 0.95rem;
-  color: rgba(27, 27, 27, 0.74);
+  color: rgba(27, 27, 27, 0.70);
   transition: background 160ms ease, color 160ms ease, transform 160ms ease;
 }
 
@@ -130,14 +130,14 @@
   border-radius: 999px;
   background: linear-gradient(135deg, #c2185b, #e91e63);
   color: #fff;
-  font-weight: 900;
+  font-weight: 850;
   font-size: 0.78rem;
 
   display: inline-flex;
   align-items: center;
   justify-content: center;
 
-  box-shadow: 0 16px 32px rgba(233, 30, 99, 0.26);
+  box-shadow: 0 16px 32px rgba(233, 30, 99, 0.22);
 }
 
 .pill {
@@ -149,11 +149,11 @@
   border-radius: 999px;
 
   border: 1px solid rgba(233, 30, 99, 0.18);
-  background: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.78);
 
-  font-weight: 900;
+  font-weight: 750;
   font-size: 0.92rem;
-  color: rgba(27, 27, 27, 0.78);
+  color: rgba(27, 27, 27, 0.76);
 
   transition: background 160ms ease, border-color 160ms ease, transform 160ms ease;
 }
@@ -175,8 +175,9 @@
   cursor: pointer;
 }
 
+/* Mobile Nav */
 .mobileNav {
-  min-width: 180px;
+  min-width: 220px;
 }
 
 .mobileLabel {
@@ -185,10 +186,39 @@
   top: -9999px;
 }
 
+/* A wrapper allows more reliable styling than select alone on mobile */
+.mobileSelectWrap {
+  position: relative;
+  border-radius: 999px;
+  padding: 2px;
+
+  background: linear-gradient(135deg, rgba(194, 24, 91, 0.9), rgba(233, 30, 99, 0.85));
+  box-shadow: 0 16px 34px rgba(233, 30, 99, 0.16);
+}
+
 .mobileSelect {
   height: 44px;
   border-radius: 999px;
-  padding: 10px 12px;
+  padding: 10px 44px 10px 14px; /* room for arrow */
+  border: 1px solid rgba(255, 255, 255, 0.0);
+  background: rgba(255, 255, 255, 0.92);
+  font-weight: 650;
+}
+
+/* Extra arrow overlay to make it look consistent */
+.mobileSelectWrap::after {
+  content: "";
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  pointer-events: none;
+
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%23C2185B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E")
+    no-repeat center / 18px 18px;
 }
 
 /* Responsive fine-tuning */
@@ -197,6 +227,7 @@
     height: auto;
     padding: 12px 0;
     align-items: flex-start;
+    gap: 10px;
   }
 
   .brand {
@@ -205,6 +236,7 @@
 
   .actions {
     min-width: unset;
+    gap: 8px;
   }
 
   .pillText {
@@ -213,15 +245,16 @@
 }
 
 @media (max-width: 420px) {
-  .actions {
-    gap: 8px;
+  .mobileNav {
+    width: 100%;
+    min-width: unset;
+  }
+
+  .mobileSelect {
+    width: 100%;
   }
 
   .iconBtn {
     width: 44px;
-  }
-
-  .mobileNav {
-    width: 100%;
   }
 }

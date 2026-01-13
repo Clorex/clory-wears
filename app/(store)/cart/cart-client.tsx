@@ -30,8 +30,7 @@ export default function CartClient() {
           <div className="fadeInUp">
             <h1 className={styles.h1}>Your Cart</h1>
             <p className={styles.sub}>
-              Review your items, adjust quantity, then checkout to get payment instructions and upload
-              your receipt.
+              Review your items, adjust quantity, then proceed to checkout to confirm delivery details and place your order.
             </p>
           </div>
 
@@ -171,16 +170,12 @@ export default function CartClient() {
                   </div>
 
                   <div className={styles.sideNote}>
-                    Final total will include state-based shipping fee at checkout.
+                    Final total will include the state-based delivery fee selected at checkout.
                   </div>
 
                   <Link href="/checkout" className="btn btnPrimary" aria-label="Proceed to checkout">
                     Proceed to checkout <ArrowRight size={18} />
                   </Link>
-
-                  <div className={styles.payNote}>
-                    Payment is via <b>OPay transfer</b>. You’ll upload your receipt after checkout.
-                  </div>
                 </div>
               </aside>
             </div>

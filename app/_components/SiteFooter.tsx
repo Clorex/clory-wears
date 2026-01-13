@@ -14,27 +14,13 @@ export default function SiteFooter() {
               <div className={styles.brandText}>
                 <div className={styles.brandName}>CLORY WEARS</div>
                 <div className={styles.tagline}>
-                  Premium shirts & trousers — clean cuts, confident fits.
+                  Premium essentials — clean cuts, confident fits.
                 </div>
               </div>
             </div>
 
             <div className={styles.note}>
-              Pay via transfer, upload your receipt, then tap <b>I have made payment</b>.
-              We’ll confirm and process your delivery.
-            </div>
-
-            <div className={styles.paymentBox}>
-              <div className={styles.paymentTitle}>Payment (OPay Transfer)</div>
-              <div className={styles.paymentLine}>
-                <span className={styles.k}>Account Number:</span> 8059086041
-              </div>
-              <div className={styles.paymentLine}>
-                <span className={styles.k}>Account Name:</span> Itabita Miracle
-              </div>
-              <div className={styles.paymentLine}>
-                <span className={styles.k}>Bank:</span> OPay
-              </div>
+              Designed for sharp everyday looks: office, outings, and events. Crafted for comfort, structure, and confidence.
             </div>
           </div>
 
@@ -80,19 +66,15 @@ export default function SiteFooter() {
                 My Orders
               </Link>
               <div className={styles.small}>
-                For order updates, always use your correct email at checkout.
+                Sign in to track orders and manage your details smoothly.
               </div>
             </div>
           </div>
         </div>
 
         <div className={styles.bottom}>
-          <div className={styles.copy}>
-            © {year} CLORY WEARS. All rights reserved.
-          </div>
-          <div className={styles.mini}>
-            Built with care in pink & white.
-          </div>
+          <div className={styles.copy}>© {year} CLORY WEARS. All rights reserved.</div>
+          <div className={styles.mini}>Luxury in pink & white.</div>
         </div>
       </div>
     </footer>

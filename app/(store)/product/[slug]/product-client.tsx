@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import React, { useMemo, useState } from "react";
-import { Check, ChevronLeft, Info, Minus, Plus, ShoppingBag } from "lucide-react";
+import { Check, ChevronLeft, Minus, Plus, ShoppingBag, Info } from "lucide-react";
 
 import type { Product } from "../../../_data/seedProducts";
 import { formatNgn } from "../../../_lib/format";
@@ -108,40 +108,44 @@ export default function ProductClient({ product }: { product: Product }) {
             <div className={styles.desc}>{product.description}</div>
 
             <div className={styles.variantBlock}>
-              <div className={styles.variantTitle}>Choose color</div>
-              <div className={styles.chips}>
-                {product.colors.map((c) => {
-                  const active = c === color;
-                  return (
-                    <button
-                      key={c}
-                      type="button"
-                      className={`${styles.chip} ${active ? styles.chipActive : ""}`}
-                      onClick={() => setColor(c)}
-                    >
-                      {active ? <Check size={16} /> : null}
-                      {c}
-                    </button>
-                  );
-                })}
+              <div>
+                <div className={styles.variantTitle}>Choose color</div>
+                <div className={styles.chips}>
+                  {product.colors.map((c) => {
+                    const active = c === color;
+                    return (
+                      <button
+                        key={c}
+                        type="button"
+                        className={`${styles.chip} ${active ? styles.chipActive : ""}`}
+                        onClick={() => setColor(c)}
+                      >
+                        {active ? <Check size={16} /> : null}
+                        {c}
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
 
-              <div className={styles.variantTitle}>Choose size</div>
-              <div className={styles.chips}>
-                {product.sizes.map((s) => {
-                  const active = s === size;
-                  return (
-                    <button
-                      key={s}
-                      type="button"
-                      className={`${styles.chip} ${active ? styles.chipActive : ""}`}
-                      onClick={() => setSize(s)}
-                    >
-                      {active ? <Check size={16} /> : null}
-                      {s}
-                    </button>
-                  );
-                })}
+              <div>
+                <div className={styles.variantTitle}>Choose size</div>
+                <div className={styles.chips}>
+                  {product.sizes.map((s) => {
+                    const active = s === size;
+                    return (
+                      <button
+                        key={s}
+                        type="button"
+                        className={`${styles.chip} ${active ? styles.chipActive : ""}`}
+                        onClick={() => setSize(s)}
+                      >
+                        {active ? <Check size={16} /> : null}
+                        {s}
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
             </div>
 
@@ -215,13 +219,14 @@ export default function ProductClient({ product }: { product: Product }) {
               </Link>
             </div>
 
+            {/* Luxury-first info (no payment talk here) */}
             <div className={styles.infoBox}>
               <div className={styles.infoTitle}>
-                <Info size={18} /> Payment note
+                <Info size={18} /> Delivery & fit note
               </div>
               <div className={styles.infoText}>
-                Checkout uses <b>OPay transfer</b>. After paying, you will upload your receipt and click{" "}
-                <b>I have made payment</b> so we can confirm your order.
+                Delivery fees are calculated at checkout based on your state. Need help choosing a size?
+                Check the <Link href="/size-guide">Size Guide</Link> or <Link href="/contact">Contact support</Link>.
               </div>
             </div>
 
@@ -246,8 +251,8 @@ export default function ProductClient({ product }: { product: Product }) {
             </div>
 
             <div className={styles.bottomNote}>
-              Need help choosing size? Use the <Link href="/size-guide">Size Guide</Link> or{" "}
-              <Link href="/contact">Contact support</Link>.
+              Want a clean fit recommendation? Tell us your preferred look (fitted or relaxed) on the{" "}
+              <Link href="/contact">Contact</Link> page.
             </div>
           </div>
         </section>

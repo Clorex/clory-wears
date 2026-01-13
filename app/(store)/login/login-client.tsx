@@ -3,16 +3,16 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Lock, Mail, UserPlus, LogIn, ArrowRight } from "lucide-react";
+import { Lock, Mail, UserPlus, LogIn, ArrowRight, Eye, EyeOff, TriangleAlert } from "lucide-react";
 
 import { useAuth } from "../../_providers/AuthProvider";
 import { useToast } from "../../_providers/ToastProvider";
 import styles from "./Login.module.css";
+import { isSupabaseConfigured } from "../../_lib/supabaseBrowser";
 
 type Mode = "login" | "register";
 
 function isStrongEnoughPassword(pw: string) {
-  // Simple baseline: 8+ chars
   return pw.trim().length >= 8;
 }
 
@@ -21,13 +21,25 @@ export default function LoginClient() {
   const { signIn, signUp, user, loading } = useAuth();
   const { show } = useToast();
 
+  const supabaseOk = isSupabaseConfigured();
+
   const [mode, setMode] = useState<Mode>("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const [busy, setBusy] = useState(false);
 
   async function submit() {
+    if (!supabaseOk) {
+      show({
+        kind: "error",
+        title: "Supabase not configured",
+        message: "Add NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY in Vercel env vars, then redeploy."
+      });
+      return;
+    }
+
     const e = email.trim().toLowerCase();
     const p = password;
 
@@ -53,15 +65,12 @@ export default function LoginClient() {
           return;
         }
 
-        // Often supabase may require email confirmation.
-        // We'll keep UX simple: attempt sign-in right after.
         const s = await signIn(e, p);
         if (!s.ok) {
           show({
             kind: "info",
             title: "Account created",
-            message:
-              "Please check your email if confirmation is required, then login again."
+            message: "Please check your email if confirmation is required, then login again."
           });
           return;
         }
@@ -118,18 +127,48 @@ export default function LoginClient() {
     );
   }
 
+  const disableAuthUi = !supabaseOk || busy;
+
   return (
     <div className={styles.wrap}>
       <section className={styles.hero}>
         <div className={`container ${styles.heroInner}`}>
           <div className="fadeInUp">
-            <h1 className={styles.h1}>
-              {mode === "login" ? "Login" : "Create an account"}
-            </h1>
+            <h1 className={styles.h1}>{mode === "login" ? "Login" : "Create an account"}</h1>
             <p className={styles.sub}>
               Accounts make checkout personalized: you can track your orders, upload receipts, and confirm payments
               easily from your page.
             </p>
+
+            {!supabaseOk ? (
+              <div
+                className="card"
+                style={{
+                  marginTop: 14,
+                  padding: 14,
+                  borderRadius: 18,
+                  border: "1px dashed rgba(233,30,99,0.35)",
+                  background: "rgba(233,30,99,0.06)"
+                }}
+              >
+                <div style={{ display: "inline-flex", alignItems: "center", gap: 10, fontWeight: 850, color: "#C2185B" }}>
+                  <TriangleAlert size={18} />
+                  Supabase is not configured on this deployment
+                </div>
+
+                <div style={{ marginTop: 8, color: "rgba(25,25,25,0.75)", fontWeight: 450, lineHeight: 1.6 }}>
+                  To enable login/register on Vercel, go to:
+                  <br />
+                  <b>Vercel → Project → Settings → Environment Variables</b>
+                  <br />
+                  Add:
+                  <br />• <b>NEXT_PUBLIC_SUPABASE_URL</b>
+                  <br />• <b>NEXT_PUBLIC_SUPABASE_ANON_KEY</b>
+                  <br />
+                  Then <b>Redeploy</b>.
+                </div>
+              </div>
+            ) : null}
           </div>
 
           <div className={`${styles.switcher} fadeInUp`}>
@@ -137,6 +176,9 @@ export default function LoginClient() {
               type="button"
               className={`${styles.switchBtn} ${mode === "login" ? styles.switchActive : ""}`}
               onClick={() => setMode("login")}
+              disabled={!supabaseOk}
+              aria-disabled={!supabaseOk}
+              title={!supabaseOk ? "Configure Supabase env vars first" : undefined}
             >
               <LogIn size={18} /> Login
             </button>
@@ -144,6 +186,9 @@ export default function LoginClient() {
               type="button"
               className={`${styles.switchBtn} ${mode === "register" ? styles.switchActive : ""}`}
               onClick={() => setMode("register")}
+              disabled={!supabaseOk}
+              aria-disabled={!supabaseOk}
+              title={!supabaseOk ? "Configure Supabase env vars first" : undefined}
             >
               <UserPlus size={18} /> Register
             </button>
@@ -154,9 +199,7 @@ export default function LoginClient() {
       <section className="section">
         <div className="container">
           <div className={`${styles.formCard} card fadeInUp`}>
-            <div className={styles.formTitle}>
-              {mode === "login" ? "Welcome back" : "Welcome to CLORY WEARS"}
-            </div>
+            <div className={styles.formTitle}>{mode === "login" ? "Welcome back" : "Welcome to CLORY WEARS"}</div>
             <div className={styles.formSub}>
               {mode === "login"
                 ? "Login with your email and password."
@@ -177,6 +220,7 @@ export default function LoginClient() {
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="you@email.com"
                     autoComplete="email"
+                    disabled={disableAuthUi}
                   />
                 </div>
               </div>
@@ -185,30 +229,38 @@ export default function LoginClient() {
                 <label className="label" htmlFor="password">
                   Password
                 </label>
+
                 <div className={styles.iconInput}>
                   <Lock size={18} className={styles.icon} aria-hidden="true" />
+
                   <input
                     id="password"
-                    className={`input ${styles.input}`}
+                    className={`input ${styles.input} ${styles.passwordInput}`}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="********"
-                    type="password"
+                    type={showPassword ? "text" : "password"}
                     autoComplete={mode === "login" ? "current-password" : "new-password"}
+                    disabled={disableAuthUi}
                   />
+
+                  <button
+                    type="button"
+                    className={styles.pwToggle}
+                    onClick={() => setShowPassword((s) => !s)}
+                    aria-label={showPassword ? "Hide password" : "Show password"}
+                    title={showPassword ? "Hide password" : "Show password"}
+                    disabled={disableAuthUi}
+                  >
+                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
                 </div>
-                <div className="helper">
-                  Tip: use a password you will remember (8+ characters).
-                </div>
+
+                <div className="helper">Tip: use a password you will remember (8+ characters).</div>
               </div>
 
-              <button
-                type="button"
-                className="btn btnPrimary"
-                onClick={submit}
-                disabled={busy}
-              >
-                {busy ? "Please wait…" : mode === "login" ? "Login" : "Create account"}
+              <button type="button" className="btn btnPrimary" onClick={submit} disabled={disableAuthUi}>
+                {!supabaseOk ? "Configure Supabase to continue" : busy ? "Please wait…" : mode === "login" ? "Login" : "Create account"}
                 <ArrowRight size={18} />
               </button>
 

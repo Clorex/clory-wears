@@ -1,14 +1,14 @@
 .wrap {
-  padding: 22px 0 48px;
+  padding: 18px 0 44px;
 }
 
 .breadcrumbs {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 14px;
+  gap: 12px;
   flex-wrap: wrap;
-  margin-bottom: 14px;
+  margin-bottom: 12px;
 }
 
 .backLink {
@@ -21,7 +21,7 @@
   background: rgba(233, 30, 99, 0.06);
   border: 1px solid rgba(233, 30, 99, 0.18);
   color: #c2185b;
-  font-weight: 950;
+  font-weight: 650;
   transition: background 160ms ease, transform 160ms ease;
 }
 
@@ -37,14 +37,14 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  color: rgba(27, 27, 27, 0.70);
-  font-weight: 800;
+  color: rgba(25, 25, 25, 0.70);
+  font-weight: 500;
   flex-wrap: wrap;
 }
 
 .crumb {
-  color: rgba(27, 27, 27, 0.72);
-  font-weight: 850;
+  color: rgba(25, 25, 25, 0.72);
+  font-weight: 550;
 }
 .crumb:hover {
   color: #c2185b;
@@ -55,14 +55,14 @@
 }
 
 .crumbCurrent {
-  color: rgba(27, 27, 27, 0.86);
-  font-weight: 950;
+  color: rgba(25, 25, 25, 0.86);
+  font-weight: 650;
 }
 
 .grid {
   display: grid;
   grid-template-columns: 1.05fr 0.95fr;
-  gap: 16px;
+  gap: 14px;
   align-items: start;
 }
 
@@ -96,11 +96,11 @@
   border-radius: 999px;
 
   color: #fff;
-  font-weight: 950;
-  letter-spacing: -0.03em;
+  font-weight: 750;
+  letter-spacing: -0.02em;
 
   background: linear-gradient(135deg, rgba(194, 24, 91, 0.95), rgba(233, 30, 99, 0.92));
-  box-shadow: 0 18px 40px rgba(233, 30, 99, 0.24);
+  box-shadow: 0 18px 40px rgba(233, 30, 99, 0.20);
 }
 
 .thumbs {
@@ -148,7 +148,7 @@
 .panel {
   border-radius: 22px;
   border: 1px solid rgba(194, 24, 91, 0.14);
-  background: rgba(255, 255, 255, 0.82);
+  background: rgba(255, 255, 255, 0.84);
   box-shadow: 0 22px 60px rgba(194, 24, 91, 0.10);
   padding: 16px;
 }
@@ -168,26 +168,28 @@
   border: 1px solid rgba(233, 30, 99, 0.20);
   background: rgba(233, 30, 99, 0.08);
   color: #c2185b;
-  font-weight: 950;
+  font-weight: 700;
   margin-bottom: 10px;
 }
 
 .h1 {
-  font-size: clamp(1.8rem, 3vw, 2.3rem);
-  line-height: 1.05;
-  font-weight: 950;
+  font-size: clamp(1.6rem, 2.8vw, 2.2rem);
+  line-height: 1.06;
+  font-weight: 850;
   letter-spacing: -0.06em;
   margin: 0 0 8px 0;
 }
 
 .subtitle {
-  color: rgba(27, 27, 27, 0.74);
-  font-weight: 750;
+  color: rgba(25, 25, 25, 0.74);
+  font-weight: 500;
+  line-height: 1.55;
 }
 
 .desc {
-  color: rgba(27, 27, 27, 0.74);
-  font-weight: 650;
+  color: rgba(25, 25, 25, 0.74);
+  font-weight: 450;
+  line-height: 1.7;
   margin-bottom: 12px;
 }
 
@@ -201,9 +203,9 @@
 }
 
 .variantTitle {
-  font-weight: 950;
-  letter-spacing: -0.03em;
-  color: rgba(27, 27, 27, 0.86);
+  font-weight: 750;
+  letter-spacing: -0.02em;
+  color: rgba(25, 25, 25, 0.86);
   margin-bottom: 8px;
 }
 
@@ -223,8 +225,8 @@
   align-items: center;
   gap: 8px;
 
-  color: rgba(27, 27, 27, 0.72);
-  font-weight: 900;
+  color: rgba(25, 25, 25, 0.74);
+  font-weight: 600;
   cursor: pointer;
 
   transition: background 160ms ease, border-color 160ms ease, transform 160ms ease;
@@ -243,6 +245,7 @@
   background: rgba(233, 30, 99, 0.12);
   border-color: rgba(233, 30, 99, 0.42);
   color: #c2185b;
+  font-weight: 700;
 }
 
 .qtyRow {
@@ -255,13 +258,13 @@
 }
 
 .qtyLabel {
-  font-weight: 950;
-  letter-spacing: -0.03em;
+  font-weight: 750;
+  letter-spacing: -0.02em;
 }
 
 .qtyHint {
-  color: rgba(27, 27, 27, 0.62);
-  font-weight: 700;
+  color: rgba(25, 25, 25, 0.62);
+  font-weight: 450;
   font-size: 0.92rem;
 }
 
@@ -285,10 +288,10 @@
 
   border-radius: 12px;
   border: 1px solid rgba(233, 30, 99, 0.22);
-  background: rgba(255, 255, 255, 0.78);
+  background: rgba(255, 255, 255, 0.82);
 
-  font-weight: 950;
-  color: rgba(27, 27, 27, 0.82);
+  font-weight: 750;
+  color: rgba(25, 25, 25, 0.82);
 }
 
 .totalRow {
@@ -303,15 +306,15 @@
 }
 
 .totalLabel {
-  font-weight: 950;
-  color: rgba(27, 27, 27, 0.78);
+  font-weight: 650;
+  color: rgba(25, 25, 25, 0.76);
 }
 
 .totalValue {
-  font-weight: 980;
+  font-weight: 850;
   color: #c2185b;
   letter-spacing: -0.03em;
-  font-size: 1.25rem;
+  font-size: 1.2rem;
 }
 
 .ctas {
@@ -333,14 +336,15 @@
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  font-weight: 950;
+  font-weight: 750;
   color: #c2185b;
   margin-bottom: 6px;
 }
 
 .infoText {
-  color: rgba(27, 27, 27, 0.74);
-  font-weight: 650;
+  color: rgba(25, 25, 25, 0.74);
+  font-weight: 450;
+  line-height: 1.65;
 }
 
 .split {
@@ -354,13 +358,13 @@
 .listBlock {
   border-radius: 16px;
   border: 1px solid rgba(194, 24, 91, 0.12);
-  background: rgba(255, 255, 255, 0.72);
+  background: rgba(255, 255, 255, 0.78);
   padding: 12px;
 }
 
 .listTitle {
-  font-weight: 950;
-  color: rgba(27, 27, 27, 0.86);
+  font-weight: 800;
+  color: rgba(25, 25, 25, 0.86);
   letter-spacing: -0.03em;
   margin-bottom: 8px;
 }
@@ -370,19 +374,21 @@
   padding-left: 18px;
   display: grid;
   gap: 6px;
-  color: rgba(27, 27, 27, 0.72);
-  font-weight: 700;
+  color: rgba(25, 25, 25, 0.72);
+  font-weight: 450;
+  line-height: 1.65;
 }
 
 .bottomNote {
   margin-top: 12px;
-  color: rgba(27, 27, 27, 0.68);
-  font-weight: 700;
+  color: rgba(25, 25, 25, 0.68);
+  font-weight: 450;
+  line-height: 1.6;
 }
 
 .bottomNote a {
   color: #c2185b;
-  font-weight: 900;
+  font-weight: 650;
 }
 
 @media (max-width: 980px) {
@@ -395,14 +401,28 @@
 }
 
 @media (max-width: 520px) {
+  .wrap {
+    padding: 14px 0 34px;
+  }
+
   .mainImage {
     height: 360px;
   }
+
   .thumbImage {
     width: 84px;
     height: 84px;
   }
+
   .split {
     grid-template-columns: 1fr;
+  }
+
+  .panel {
+    padding: 14px;
+  }
+
+  .desc {
+    margin-bottom: 10px;
   }
 }

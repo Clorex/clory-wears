@@ -1,9 +1,17 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, CheckCircle2, CloudUpload, CreditCard, MapPin, ShieldAlert } from "lucide-react";
+import { useSearchParams } from "next/navigation";
+import {
+  ArrowRight,
+  CheckCircle2,
+  CloudUpload,
+  CreditCard,
+  MapPin,
+  ShieldAlert
+} from "lucide-react";
 
 import { useAuth } from "../../_providers/AuthProvider";
 import { useCart } from "../../_providers/CartProvider";
@@ -11,6 +19,7 @@ import { useToast } from "../../_providers/ToastProvider";
 import { formatNgn } from "../../_lib/format";
 import { listShippingStates, shippingPriceForState } from "../../_data/shippingRates";
 import styles from "./Checkout.module.css";
+import { supabaseBrowser } from "../../_lib/supabaseBrowser";
 
 type CreateOrderResponse =
   | { ok: true; order: { id: string; reference: string } }
@@ -26,14 +35,38 @@ type ConfirmPaymentResponse =
 
 type Step = "details" | "payment";
 
+type ExistingOrder = {
+  id: string;
+  reference: string;
+  shipping_state: string;
+  shipping_ngn: number;
+  subtotal_ngn: number;
+  grand_total_ngn: number;
+  receipt_url: string | null;
+  payment_status: "pending" | "receipt_uploaded" | "payment_claimed" | "paid" | "rejected";
+  order_status: "created" | "awaiting_payment_review" | "processing" | "shipped" | "delivered" | "cancelled";
+  order_items: Array<{
+    id: string;
+    name: string;
+    price_ngn: number;
+    quantity: number;
+    size: string;
+    color: string;
+    image: string;
+  }>;
+};
+
 export default function CheckoutClient() {
+  const searchParams = useSearchParams();
+  const orderIdFromUrl = searchParams.get("order");
+
   const { user, loading } = useAuth();
   const { items, subtotalNgn, clearCart } = useCart();
   const { show } = useToast();
 
   const [step, setStep] = useState<Step>("details");
 
-  // Delivery details
+  // Delivery details (used for new orders)
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
   const [stateName, setStateName] = useState("Lagos");
@@ -41,6 +74,10 @@ export default function CheckoutClient() {
   const [address1, setAddress1] = useState("");
   const [address2, setAddress2] = useState("");
   const [note, setNote] = useState("");
+
+  // Existing order (loaded from Supabase when ?order=... is present)
+  const [existingOrder, setExistingOrder] = useState<ExistingOrder | null>(null);
+  const [loadingExisting, setLoadingExisting] = useState(false);
 
   // Order state
   const [creating, setCreating] = useState(false);
@@ -55,12 +92,85 @@ export default function CheckoutClient() {
   const [confirming, setConfirming] = useState(false);
   const [confirmed, setConfirmed] = useState(false);
 
-  const shippingNgn = useMemo(() => shippingPriceForState(stateName), [stateName]);
-  const grandTotalNgn = useMemo(() => subtotalNgn + shippingNgn, [subtotalNgn, shippingNgn]);
-
   const states = useMemo(() => listShippingStates(), []);
 
+  // Totals:
+  const shippingNgnForNew = useMemo(() => shippingPriceForState(stateName), [stateName]);
+
+  const effectiveSubtotal = existingOrder ? existingOrder.subtotal_ngn : subtotalNgn;
+  const effectiveShipping = existingOrder ? existingOrder.shipping_ngn : shippingNgnForNew;
+  const effectiveTotal = existingOrder ? existingOrder.grand_total_ngn : subtotalNgn + shippingNgnForNew;
+
   const cartEmpty = items.length === 0;
+
+  // If we have an order id in the URL, load it and move user directly to payment step
+  useEffect(() => {
+    if (!orderIdFromUrl) return;
+    if (!user?.email) return;
+
+    let cancelled = false;
+
+    async function loadExistingOrder() {
+      setLoadingExisting(true);
+      try {
+        const supabase = supabaseBrowser();
+
+        const { data, error } = await supabase
+          .from("orders")
+          .select(
+            `
+            id,
+            reference,
+            shipping_state,
+            shipping_ngn,
+            subtotal_ngn,
+            grand_total_ngn,
+            receipt_url,
+            payment_status,
+            order_status,
+            order_items (
+              id, name, price_ngn, quantity, size, color, image
+            )
+          `
+          )
+          .eq("id", orderIdFromUrl)
+          .single();
+
+        if (error) throw error;
+        if (!data) throw new Error("Order not found.");
+
+        if (cancelled) return;
+
+        const o = data as unknown as ExistingOrder;
+
+        setExistingOrder(o);
+        setOrderId(o.id);
+        setOrderRef(o.reference);
+        setStateName(o.shipping_state);
+        setReceiptUrl(o.receipt_url ?? null);
+
+        setStep("payment");
+
+        if (o.payment_status === "payment_claimed" || o.payment_status === "paid") {
+          setConfirmed(true);
+        }
+      } catch (e: any) {
+        show({
+          kind: "error",
+          title: "Could not open this checkout",
+          message: e?.message ?? "Please try again."
+        });
+      } finally {
+        if (!cancelled) setLoadingExisting(false);
+      }
+    }
+
+    loadExistingOrder();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [orderIdFromUrl, user?.email, show]);
 
   async function createOrder() {
     if (cartEmpty) {
@@ -68,7 +178,7 @@ export default function CheckoutClient() {
       return;
     }
 
-    // This store is personalized: checkout requires account so user can upload receipts & track orders.
+    // Checkout requires account for tracking
     if (!user?.email) {
       show({
         kind: "error",
@@ -89,6 +199,9 @@ export default function CheckoutClient() {
 
     setCreating(true);
     try {
+      const shippingNgn = shippingNgnForNew;
+      const grandTotalNgn = subtotalNgn + shippingNgn;
+
       const res = await fetch("/api/orders/create", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -137,7 +250,7 @@ export default function CheckoutClient() {
       show({
         kind: "success",
         title: "Order created",
-        message: `Order ref: ${data.order.reference}. Proceed to payment instructions.`
+        message: `Reference: ${data.order.reference}`
       });
     } catch (e: any) {
       show({ kind: "error", title: "Checkout error", message: e?.message ?? "Something went wrong." });
@@ -148,7 +261,7 @@ export default function CheckoutClient() {
 
   async function uploadReceipt(file: File) {
     if (!orderId) {
-      show({ kind: "error", title: "Create an order first", message: "Please submit delivery details." });
+      show({ kind: "error", title: "No order found", message: "Please create an order first." });
       return;
     }
 
@@ -166,12 +279,12 @@ export default function CheckoutClient() {
       const data = (await res.json()) as UploadReceiptResponse;
 
       if (!data.ok) {
-        show({ kind: "error", title: "Receipt upload failed", message: data.message });
+        show({ kind: "error", title: "Upload failed", message: data.message });
         return;
       }
 
       setReceiptUrl(data.receiptUrl);
-      show({ kind: "success", title: "Receipt uploaded", message: "You can now confirm payment." });
+      show({ kind: "success", title: "Uploaded", message: "You can now submit payment confirmation." });
     } catch (e: any) {
       show({ kind: "error", title: "Upload error", message: e?.message ?? "Upload failed." });
     } finally {
@@ -203,17 +316,19 @@ export default function CheckoutClient() {
       const data = (await res.json()) as ConfirmPaymentResponse;
 
       if (!data.ok) {
-        show({ kind: "error", title: "Could not confirm payment", message: data.message });
+        show({ kind: "error", title: "Could not submit confirmation", message: data.message });
         return;
       }
 
       setConfirmed(true);
-      clearCart();
+
+      // If this was a cart-based checkout, clear cart now
+      if (!existingOrder) clearCart();
 
       show({
         kind: "success",
-        title: "Payment confirmation sent",
-        message: "We have received your confirmation and will review your receipt."
+        title: "Confirmation received",
+        message: "Your payment confirmation has been submitted successfully."
       });
     } catch (e: any) {
       show({ kind: "error", title: "Confirmation error", message: e?.message ?? "Something went wrong." });
@@ -229,8 +344,7 @@ export default function CheckoutClient() {
           <div className="fadeInUp">
             <h1 className={styles.h1}>Checkout</h1>
             <p className={styles.sub}>
-              Delivery is state-based. Payment is via OPay transfer. Upload your receipt and click{" "}
-              <b>I have made payment</b> to notify us by email.
+              Confirm delivery details, then complete your order through the guided confirmation step.
             </p>
           </div>
 
@@ -242,7 +356,7 @@ export default function CheckoutClient() {
             <div className={styles.stepLine} />
             <div className={`${styles.step} ${step === "payment" ? styles.stepActive : ""}`}>
               <div className={styles.stepNum}>2</div>
-              <div className={styles.stepText}>Payment & receipt</div>
+              <div className={styles.stepText}>Confirmation</div>
             </div>
           </div>
         </div>
@@ -255,10 +369,10 @@ export default function CheckoutClient() {
           ) : !user ? (
             <div className={`${styles.notice} card fadeInUp`}>
               <div className={styles.noticeTitle}>
-                <ShieldAlert size={18} /> Login required to checkout
+                <ShieldAlert size={18} /> Login required
               </div>
               <div className={styles.noticeText}>
-                This store uses personalized accounts so you can track orders and upload receipts easily.
+                Login to place orders and manage confirmations securely.
               </div>
               <div className={styles.noticeCtas}>
                 <Link href="/login" className="btn btnPrimary">
@@ -269,12 +383,12 @@ export default function CheckoutClient() {
                 </Link>
               </div>
             </div>
-          ) : cartEmpty ? (
+          ) : loadingExisting ? (
+            <div className={`${styles.notice} card fadeInUp`}>Opening your order…</div>
+          ) : !existingOrder && cartEmpty ? (
             <div className={`${styles.notice} card fadeInUp`}>
               <div className={styles.noticeTitle}>Your cart is empty</div>
-              <div className={styles.noticeText}>
-                Add items to your cart before checkout.
-              </div>
+              <div className={styles.noticeText}>Add items to your cart before checkout.</div>
               <Link href="/shop" className="btn btnPrimary">
                 Go to Shop <ArrowRight size={18} />
               </Link>
@@ -306,15 +420,10 @@ export default function CheckoutClient() {
 
                       <div className={styles.field}>
                         <label className="label" htmlFor="email">
-                          Email (from your account)
+                          Email
                         </label>
-                        <input
-                          id="email"
-                          className="input"
-                          value={user.email ?? ""}
-                          readOnly
-                        />
-                        <div className="helper">This is where order updates will be linked.</div>
+                        <input id="email" className="input" value={user.email ?? ""} readOnly />
+                        <div className="helper">This helps keep your order history linked to your account.</div>
                       </div>
 
                       <div className={styles.field}>
@@ -405,14 +514,8 @@ export default function CheckoutClient() {
                     </div>
 
                     <div className={styles.panelCtas}>
-                      <button
-                        type="button"
-                        className="btn btnPrimary"
-                        onClick={createOrder}
-                        disabled={creating}
-                      >
-                        {creating ? "Creating order…" : "Continue to payment"}
-                        <ArrowRight size={18} />
+                      <button type="button" className="btn btnPrimary" onClick={createOrder} disabled={creating}>
+                        {creating ? "Creating order…" : "Continue"} <ArrowRight size={18} />
                       </button>
 
                       <Link href="/cart" className="btn btnGhost">
@@ -423,7 +526,7 @@ export default function CheckoutClient() {
                 ) : (
                   <div className={`${styles.panel} card`}>
                     <div className={styles.panelTitle}>
-                      <CreditCard size={18} /> Payment instructions
+                      <CreditCard size={18} /> Confirmation
                     </div>
 
                     <div className={styles.orderMeta}>
@@ -432,13 +535,14 @@ export default function CheckoutClient() {
                         <span className={styles.vStrong}>{orderRef ?? "—"}</span>
                       </div>
                       <div className={styles.orderLine}>
-                        <span className={styles.k}>Amount to pay</span>
-                        <span className={styles.vPink}>{formatNgn(grandTotalNgn)}</span>
+                        <span className={styles.k}>Total</span>
+                        <span className={styles.vPink}>{formatNgn(effectiveTotal)}</span>
                       </div>
                     </div>
 
+                    {/* Payment details live only here */}
                     <div className={styles.paymentBox}>
-                      <div className={styles.paymentTitle}>Pay to this OPay account</div>
+                      <div className={styles.paymentTitle}>Payment details</div>
                       <div className={styles.paymentLine}>
                         <span className={styles.k2}>Account Number:</span> 8059086041
                       </div>
@@ -450,7 +554,7 @@ export default function CheckoutClient() {
                       </div>
 
                       <div className={styles.paymentHint}>
-                        Use your <b>Order reference</b> as narration if possible.
+                        Use your <b>order reference</b> as narration if possible.
                       </div>
                     </div>
 
@@ -487,9 +591,7 @@ export default function CheckoutClient() {
                           </div>
                         </div>
                       ) : (
-                        <div className={styles.receiptNote}>
-                          Upload a clear image showing the transfer details.
-                        </div>
+                        <div className={styles.receiptNote}>Upload a clear image showing the transfer details.</div>
                       )}
                     </div>
 
@@ -500,23 +602,23 @@ export default function CheckoutClient() {
                         onClick={confirmPayment}
                         disabled={confirming || confirmed || !receiptUrl}
                       >
-                        {confirmed ? "Payment confirmed" : confirming ? "Sending confirmation…" : "I have made payment"}
+                        {confirmed ? "Submitted" : confirming ? "Submitting…" : "Submit confirmation"}{" "}
                         <ArrowRight size={18} />
                       </button>
 
-                      <button
-                        type="button"
-                        className="btn btnGhost"
-                        onClick={() => setStep("details")}
-                        disabled={confirmed}
-                      >
-                        Edit delivery details
-                      </button>
+                      {!existingOrder ? (
+                        <button type="button" className="btn btnGhost" onClick={() => setStep("details")} disabled={confirmed}>
+                          Edit delivery details
+                        </button>
+                      ) : (
+                        <Link href="/account" className="btn btnGhost">
+                          Back to account
+                        </Link>
+                      )}
                     </div>
 
                     <div className={styles.afterNote}>
-                      When you click <b>I have made payment</b>, we will receive an email notification at{" "}
-                      <b>itabitamiracle090@gmail.com</b> to review your receipt.
+                      After you submit confirmation, we’ll review and proceed with your order.
                     </div>
                   </div>
                 )}
@@ -528,8 +630,16 @@ export default function CheckoutClient() {
                   <div className={styles.summaryTitle}>Order summary</div>
 
                   <div className={styles.summaryItems}>
-                    {items.map((it) => (
-                      <div key={`${it.id}-${it.color}-${it.size}`} className={styles.summaryItem}>
+                    {(existingOrder ? existingOrder.order_items : items.map((it) => ({
+                      id: `${it.id}-${it.color}-${it.size}`,
+                      name: it.name,
+                      price_ngn: it.priceNgn,
+                      quantity: it.quantity,
+                      size: it.size,
+                      color: it.color,
+                      image: it.image
+                    }))).map((it: any) => (
+                      <div key={it.id} className={styles.summaryItem}>
                         <div className={styles.sumImg}>
                           <Image src={it.image} alt={it.name} fill sizes="58px" className={styles.img} />
                         </div>
@@ -539,7 +649,9 @@ export default function CheckoutClient() {
                             {it.color} • {it.size} • x{it.quantity}
                           </div>
                         </div>
-                        <div className={styles.sumPrice}>{formatNgn(it.priceNgn * it.quantity)}</div>
+                        <div className={styles.sumPrice}>
+                          {formatNgn((existingOrder ? it.price_ngn : it.price_ngn) * it.quantity)}
+                        </div>
                       </div>
                     ))}
                   </div>
@@ -548,23 +660,23 @@ export default function CheckoutClient() {
 
                   <div className={styles.sumLine}>
                     <span className={styles.k}>Subtotal</span>
-                    <span className={styles.v}>{formatNgn(subtotalNgn)}</span>
+                    <span className={styles.v}>{formatNgn(effectiveSubtotal)}</span>
                   </div>
 
                   <div className={styles.sumLine}>
-                    <span className={styles.k}>Shipping ({stateName})</span>
-                    <span className={styles.v}>{formatNgn(shippingNgn)}</span>
+                    <span className={styles.k}>Delivery</span>
+                    <span className={styles.v}>{formatNgn(effectiveShipping)}</span>
                   </div>
 
                   <div className="hr" />
 
                   <div className={styles.sumLine}>
                     <span className={styles.kStrong}>Total</span>
-                    <span className={styles.vPink}>{formatNgn(grandTotalNgn)}</span>
+                    <span className={styles.vPink}>{formatNgn(effectiveTotal)}</span>
                   </div>
 
                   <div className={styles.sumNote}>
-                    Shipping is based on your selected state. If you change state, the shipping fee changes too.
+                    Delivery is calculated based on your selected state.
                   </div>
                 </div>
               </aside>

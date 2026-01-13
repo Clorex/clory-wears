@@ -7,15 +7,15 @@ import {
   ArrowRight,
   BadgeCheck,
   ClipboardCopy,
-  CloudUpload,
   RefreshCcw,
   ShieldAlert,
   ShieldCheck,
+  ExternalLink
 } from "lucide-react";
 
 import { useAuth } from "../../_providers/AuthProvider";
 import { useToast } from "../../_providers/ToastProvider";
-import { supabaseBrowser } from "../../_lib/supabaseBrowser";
+import { supabaseBrowser, isSupabaseConfigured } from "../../_lib/supabaseBrowser";
 import { formatDateTime, formatNgn } from "../../_lib/format";
 import styles from "./Account.module.css";
 
@@ -35,8 +35,6 @@ type DbOrder = {
   reference: string;
 
   customer_email: string;
-  customer_full_name: string;
-  customer_phone: string;
 
   shipping_state: string;
   shipping_city: string;
@@ -66,42 +64,40 @@ type DbOrder = {
 };
 
 function statusLabel(payment: DbOrder["payment_status"], order: DbOrder["order_status"]) {
-  if (payment === "paid") return { text: "Paid", tone: "good" as const };
-  if (payment === "payment_claimed") return { text: "Payment claimed (reviewing)", tone: "warn" as const };
+  // Keep it customer-facing and calm (not payment-heavy)
+  if (payment === "paid") return { text: "Confirmed", tone: "good" as const };
+  if (payment === "payment_claimed") return { text: "Confirmation submitted", tone: "warn" as const };
   if (payment === "receipt_uploaded") return { text: "Receipt uploaded", tone: "info" as const };
-  if (payment === "rejected") return { text: "Payment rejected", tone: "bad" as const };
+  if (payment === "rejected") return { text: "Needs review", tone: "bad" as const };
 
   if (order === "processing") return { text: "Processing", tone: "info" as const };
   if (order === "shipped") return { text: "Shipped", tone: "info" as const };
   if (order === "delivered") return { text: "Delivered", tone: "good" as const };
   if (order === "cancelled") return { text: "Cancelled", tone: "bad" as const };
 
-  return { text: "Pending payment", tone: "warn" as const };
+  return { text: "Awaiting confirmation", tone: "warn" as const };
 }
 
 export default function AccountClient() {
   const { user, loading, isAdmin } = useAuth();
   const { show } = useToast();
 
+  const supabaseOk = isSupabaseConfigured();
+
   const [busy, setBusy] = useState(false);
   const [orders, setOrders] = useState<DbOrder[]>([]);
   const [error, setError] = useState<string | null>(null);
 
-  // per-order receipt states (upload preview after API returns public url)
-  const [receiptByOrder, setReceiptByOrder] = useState<Record<string, string | null>>({});
-  const [uploadingOrderId, setUploadingOrderId] = useState<string | null>(null);
-  const [confirmingOrderId, setConfirmingOrderId] = useState<string | null>(null);
-
   const hasOrders = orders.length > 0;
 
-  const mergedOrders = useMemo(() => {
-    return orders.map((o) => ({
-      ...o,
-      receipt_url: receiptByOrder[o.id] ?? o.receipt_url
-    }));
-  }, [orders, receiptByOrder]);
-
   async function loadOrders() {
+    if (!supabaseOk) {
+      setError(
+        "Account features are not configured on this deployment. Please set Supabase env vars on Vercel and redeploy."
+      );
+      return;
+    }
+
     setBusy(true);
     setError(null);
     try {
@@ -112,7 +108,7 @@ export default function AccountClient() {
         .select(
           `
           id, reference,
-          customer_email, customer_full_name, customer_phone,
+          customer_email,
           shipping_state, shipping_city, shipping_address1, shipping_address2, shipping_note,
           subtotal_ngn, shipping_ngn, grand_total_ngn,
           receipt_url, payment_status, order_status,
@@ -149,69 +145,6 @@ export default function AccountClient() {
     }
   }
 
-  async function uploadReceipt(orderId: string, file: File) {
-    setUploadingOrderId(orderId);
-    try {
-      const fd = new FormData();
-      fd.append("orderId", orderId);
-      fd.append("receipt", file);
-
-      const res = await fetch("/api/orders/upload-receipt", {
-        method: "POST",
-        body: fd
-      });
-
-      const data = (await res.json()) as
-        | { ok: true; receiptUrl: string }
-        | { ok: false; message: string };
-
-      if (!data.ok) {
-        show({ kind: "error", title: "Receipt upload failed", message: data.message });
-        return;
-      }
-
-      setReceiptByOrder((prev) => ({ ...prev, [orderId]: data.receiptUrl }));
-      show({ kind: "success", title: "Receipt uploaded", message: "You can now confirm payment." });
-    } catch (e: any) {
-      show({ kind: "error", title: "Upload error", message: e?.message ?? "Upload failed." });
-    } finally {
-      setUploadingOrderId(null);
-    }
-  }
-
-  async function confirmPayment(orderId: string, receiptUrl: string) {
-    setConfirmingOrderId(orderId);
-    try {
-      const res = await fetch("/api/orders/confirm-payment", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ orderId, receiptUrl })
-      });
-
-      const data = (await res.json()) as
-        | { ok: true }
-        | { ok: false; message: string };
-
-      if (!data.ok) {
-        show({ kind: "error", title: "Could not confirm payment", message: data.message });
-        return;
-      }
-
-      show({
-        kind: "success",
-        title: "Confirmation sent",
-        message: "We have been notified by email and will review your receipt."
-      });
-
-      // refresh statuses from DB
-      await loadOrders();
-    } catch (e: any) {
-      show({ kind: "error", title: "Confirmation error", message: e?.message ?? "Something went wrong." });
-    } finally {
-      setConfirmingOrderId(null);
-    }
-  }
-
   if (loading) {
     return (
       <div className={styles.wrap}>
@@ -231,7 +164,7 @@ export default function AccountClient() {
               <ShieldAlert size={18} /> Login required
             </div>
             <div className={styles.noticeText}>
-              Login to view your orders, upload receipts, and confirm payments.
+              Login to view your orders and manage order confirmations.
             </div>
             <div className={styles.noticeCtas}>
               <Link href="/login" className="btn btnPrimary">
@@ -256,17 +189,12 @@ export default function AccountClient() {
               <span className="badge">
                 <ShieldCheck size={16} /> Signed in as {user.email}
               </span>
-              {isAdmin ? (
-                <span className="badge" style={{ marginLeft: 10 }}>
-                  Admin access enabled
-                </span>
-              ) : null}
+              {isAdmin ? <span className="badge">Admin access enabled</span> : null}
             </div>
 
             <h1 className={styles.h1}>My Account</h1>
             <p className={styles.sub}>
-              View your orders, upload receipts, and confirm payment. Once you confirm payment, we receive an email
-              notification and will review your receipt.
+              View your orders and continue any required confirmation from the Checkout page.
             </p>
 
             {isAdmin ? (
@@ -281,12 +209,7 @@ export default function AccountClient() {
           <div className={`${styles.panelTop} fadeInUp`}>
             <div className={styles.panelTitle}>Quick actions</div>
 
-            <button
-              type="button"
-              className="btn btnGhost"
-              onClick={loadOrders}
-              disabled={busy}
-            >
+            <button type="button" className="btn btnGhost" onClick={loadOrders} disabled={busy}>
               <RefreshCcw size={18} /> {busy ? "Refreshing…" : "Refresh orders"}
             </button>
 
@@ -311,7 +234,7 @@ export default function AccountClient() {
             <div className={`${styles.notice} card fadeInUp`}>
               <div className={styles.noticeTitle}>No orders yet</div>
               <div className={styles.noticeText}>
-                When you place an order, it will appear here. You can upload your receipt and confirm payment from this page.
+                When you place an order, it will appear here.
               </div>
               <Link href="/shop" className="btn btnPrimary">
                 Start shopping <ArrowRight size={18} />
@@ -319,7 +242,7 @@ export default function AccountClient() {
             </div>
           ) : (
             <div className={styles.list}>
-              {mergedOrders.map((o) => {
+              {orders.map((o) => {
                 const st = statusLabel(o.payment_status, o.order_status);
                 const toneClass =
                   st.tone === "good"
@@ -330,10 +253,11 @@ export default function AccountClient() {
                     ? styles.toneWarn
                     : styles.toneInfo;
 
-                const receipt = o.receipt_url;
-
                 const items = o.order_items ?? [];
                 const cover = items[0]?.image ?? "/images/placeholder.jpg";
+
+                const canContinue =
+                  o.payment_status !== "paid" && o.order_status !== "cancelled";
 
                 return (
                   <div key={o.id} className={`${styles.orderCard} card fadeInUp`}>
@@ -372,7 +296,7 @@ export default function AccountClient() {
                           <span className={styles.vPink}>{formatNgn(o.grand_total_ngn)}</span>
                         </div>
                         <div className={styles.moneyLine}>
-                          <span className={styles.k}>Shipping</span>
+                          <span className={styles.k}>Delivery</span>
                           <span className={styles.v}>{formatNgn(o.shipping_ngn)}</span>
                         </div>
                         <div className={styles.moneyLine}>
@@ -417,61 +341,35 @@ export default function AccountClient() {
                       </div>
 
                       <div className={styles.block}>
-                        <div className={styles.blockTitle}>Receipt</div>
+                        <div className={styles.blockTitle}>Order actions</div>
 
-                        {receipt ? (
-                          <div className={styles.receiptRow}>
-                            <a className={styles.receiptLink} href={receipt} target="_blank" rel="noreferrer">
-                              View uploaded receipt
-                            </a>
-                            <button type="button" className="btn btnGhost" onClick={() => copy(receipt)}>
-                              Copy receipt link
-                            </button>
-                          </div>
-                        ) : (
-                          <div className={styles.blockText}>
-                            No receipt uploaded yet. Upload it below after paying.
-                          </div>
-                        )}
+                        <div className={styles.blockText}>
+                          Continue any required confirmation from checkout.
+                        </div>
 
-                        <div className={styles.actions}>
-                          <label className={`btn btnGhost ${styles.fileBtn}`}>
-                            <CloudUpload size={18} />
-                            {uploadingOrderId === o.id ? "Uploading…" : "Upload receipt"}
-                            <input
-                              type="file"
-                              accept="image/*"
-                              className={styles.file}
-                              disabled={uploadingOrderId === o.id}
-                              onChange={(e) => {
-                                const f = e.target.files?.[0];
-                                if (f) uploadReceipt(o.id, f);
-                              }}
-                            />
-                          </label>
-
-                          <button
-                            type="button"
+                        <div className={styles.actions} style={{ marginTop: 10 }}>
+                          <Link
+                            href={`/checkout?order=${o.id}`}
                             className="btn btnPrimary"
-                            disabled={!receipt || confirmingOrderId === o.id || o.payment_status === "payment_claimed" || o.payment_status === "paid"}
-                            onClick={() => {
-                              if (!receipt) return;
-                              confirmPayment(o.id, receipt);
-                            }}
+                            aria-disabled={!canContinue}
+                            style={!canContinue ? { pointerEvents: "none", opacity: 0.65 } : undefined}
                           >
-                            {o.payment_status === "paid"
-                              ? "Already paid"
-                              : o.payment_status === "payment_claimed"
-                              ? "Already confirmed"
-                              : confirmingOrderId === o.id
-                              ? "Sending confirmation…"
-                              : "I have made payment"}
-                            <ArrowRight size={18} />
+                            {o.payment_status === "paid" ? "Confirmed" : "Continue in Checkout"} <ArrowRight size={18} />
+                          </Link>
+
+                          <button type="button" className="btn btnGhost" onClick={() => copy(o.reference)}>
+                            Copy reference
                           </button>
+
+                          {o.receipt_url ? (
+                            <a className="btn btnGhost" href={o.receipt_url} target="_blank" rel="noreferrer">
+                              View receipt <ExternalLink size={18} />
+                            </a>
+                          ) : null}
                         </div>
 
                         <div className={styles.helpText}>
-                          After you confirm payment, we will be notified by email and will review your receipt.
+                          If you need assistance, contact support and include your order reference.
                         </div>
                       </div>
                     </div>

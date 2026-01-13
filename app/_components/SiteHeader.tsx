@@ -29,7 +29,6 @@ export default function SiteHeader() {
     const found = navItems.find((n) => pathname === n.href);
     if (found) return found.href;
 
-    // if on a nested route like /product/slug, default to /shop
     if (pathname?.startsWith("/product")) return "/shop";
     if (pathname?.startsWith("/account")) return "/account";
     if (pathname?.startsWith("/checkout")) return "/checkout";
@@ -67,31 +66,38 @@ export default function SiteHeader() {
           })}
         </nav>
 
-        {/* Mobile dropdown nav (requested) */}
+        {/* Mobile dropdown nav */}
         <div className={`mobileOnly ${styles.mobileNav}`}>
           <label className={styles.mobileLabel} htmlFor="mobile-nav-select">
             Navigate
           </label>
-          <select
-            id="mobile-nav-select"
-            className={`select ${styles.mobileSelect}`}
-            value={currentValue}
-            onChange={(e) => {
-              const href = e.target.value;
-              if (href) router.push(href);
-            }}
-          >
-            <option value="" disabled>
-              Choose a page…
-            </option>
-            {navItems.map((n) => (
-              <option key={n.href} value={n.href}>
-                {n.label}
+
+          <div className={styles.mobileSelectWrap}>
+            <select
+              id="mobile-nav-select"
+              className={`select ${styles.mobileSelect}`}
+              value={currentValue}
+              onChange={(e) => {
+                const href = e.target.value;
+                if (href) router.push(href);
+              }}
+            >
+              <option value="" disabled>
+                Choose a page…
               </option>
-            ))}
-            <option value="/cart">Cart</option>
-            {user ? <option value="/account">My Account</option> : <option value="/login">Login</option>}
-          </select>
+              {navItems.map((n) => (
+                <option key={n.href} value={n.href}>
+                  {n.label}
+                </option>
+              ))}
+              <option value="/cart">Cart</option>
+              {user ? (
+                <option value="/account">My Account</option>
+              ) : (
+                <option value="/login">Login</option>
+              )}
+            </select>
+          </div>
         </div>
 
         <div className={styles.actions}>

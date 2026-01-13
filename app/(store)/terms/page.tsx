@@ -5,8 +5,7 @@ import styles from "./Terms.module.css";
 
 export const metadata: Metadata = {
   title: "Terms",
-  description:
-    "CLORY WEARS Terms — store rules, payment process, delivery notes, and responsibilities."
+  description: "CLORY WEARS Terms — orders, pricing, delivery, returns, and support."
 };
 
 export default function TermsPage() {
@@ -43,9 +42,9 @@ export default function TermsPage() {
                 <ShieldCheck size={18} /> Key points
               </div>
               <ul className={styles.tips}>
-                <li>Checkout requires an account for order tracking and receipt uploads.</li>
-                <li>Payment is via transfer and confirmed manually after receipt review.</li>
+                <li>Checkout requires an account for order tracking.</li>
                 <li>Delivery fees depend on selected state.</li>
+                <li>Order confirmation steps are guided during checkout.</li>
               </ul>
             </div>
           </div>
@@ -55,39 +54,28 @@ export default function TermsPage() {
       <section className="section">
         <div className="container">
           <div className={`${styles.card} card fadeInUp`}>
-            <div className={styles.cardTitle}>1) Orders & account</div>
+            <div className={styles.cardTitle}>1) Orders & accounts</div>
             <p className={styles.p}>
-              To place an order, you need an account (email/password). This helps us link your order,
-              receipt upload and confirmation to your profile.
+              To place an order, you need an account (email/password). This allows you to track your order history and
+              manage order-related actions from your account page.
             </p>
 
             <div className={styles.cardTitle}>2) Pricing</div>
             <p className={styles.p}>
-              Prices are displayed in <b>NGN (₦)</b>. Shipping is added at checkout based on your selected state.
+              Prices are displayed in <b>NGN (₦)</b>. Delivery (shipping) is calculated at checkout based on your selected
+              state and address.
             </p>
 
-            <div className={styles.cardTitle}>3) Payment method (Transfer)</div>
+            <div className={styles.cardTitle}>3) Checkout & payment</div>
             <p className={styles.p}>
-              Payment is made via transfer to our OPay account. After payment, you upload your receipt and click{" "}
-              <b>I have made payment</b>. We then review and confirm.
+              After you place an order, checkout will guide you through the confirmation steps required to complete your
+              purchase. For security and clarity, payment instructions are presented <b>during checkout</b>.
             </p>
-
-            <div className={styles.payBox}>
-              <div className={styles.payTitle}>Payment details</div>
-              <div className={styles.payLine}>
-                <span className={styles.k}>Account Number:</span> 8059086041
-              </div>
-              <div className={styles.payLine}>
-                <span className={styles.k}>Account Name:</span> Itabita Miracle
-              </div>
-              <div className={styles.payLine}>
-                <span className={styles.k}>Bank:</span> OPay
-              </div>
-            </div>
 
             <div className={styles.cardTitle}>4) Delivery</div>
             <p className={styles.p}>
-              Delivery fees depend on your state selection at checkout. Ensure your address and phone number are correct.
+              Ensure your address and phone number are correct. Delivery timelines can vary depending on your location and
+              logistics.
             </p>
 
             <div className={styles.cardTitle}>5) Returns & exchange</div>
@@ -98,11 +86,16 @@ export default function TermsPage() {
             <div className={styles.cardTitle}>6) Support</div>
             <p className={styles.p}>
               If you have a question or issue, contact us via the <Link href="/contact">Contact</Link> page.
-              Include your order reference if available.
+              If you already placed an order, include your order reference for faster support.
             </p>
 
             <div className={styles.small}>
-              Last updated: {new Date().toLocaleDateString("en-NG", { year: "numeric", month: "short", day: "2-digit" })}
+              Last updated:{" "}
+              {new Date().toLocaleDateString("en-NG", {
+                year: "numeric",
+                month: "short",
+                day: "2-digit"
+              })}
             </div>
           </div>
         </div>

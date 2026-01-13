@@ -3,15 +3,15 @@
 }
 
 .hero {
-  padding: 34px 0 18px;
+  padding: 28px 0 16px;
   background: radial-gradient(
       1100px 420px at 15% 10%,
-      rgba(233, 30, 99, 0.14),
+      rgba(233, 30, 99, 0.12),
       rgba(255, 255, 255, 0)
     ),
     radial-gradient(
       900px 420px at 95% 20%,
-      rgba(194, 24, 91, 0.12),
+      rgba(194, 24, 91, 0.10),
       rgba(255, 255, 255, 0)
     );
   border-bottom: 1px solid rgba(194, 24, 91, 0.10);
@@ -25,16 +25,17 @@
 }
 
 .h1 {
-  font-size: clamp(2rem, 3.6vw, 2.7rem);
-  line-height: 1.05;
-  font-weight: 950;
+  font-size: clamp(1.9rem, 3.4vw, 2.55rem);
+  line-height: 1.06;
+  font-weight: 850;
   letter-spacing: -0.06em;
   margin: 0 0 10px 0;
 }
 
 .sub {
-  color: rgba(27, 27, 27, 0.74);
-  font-weight: 650;
+  color: rgba(25, 25, 25, 0.74);
+  font-weight: 450;
+  line-height: 1.7;
   max-width: 72ch;
 }
 
@@ -42,7 +43,7 @@
 .stepper {
   border-radius: 20px;
   border: 1px solid rgba(194, 24, 91, 0.14);
-  background: rgba(255, 255, 255, 0.78);
+  background: rgba(255, 255, 255, 0.82);
   box-shadow: 0 18px 45px rgba(194, 24, 91, 0.10);
   padding: 14px;
   display: flex;
@@ -67,13 +68,13 @@
 
   border: 1px solid rgba(233, 30, 99, 0.22);
   background: rgba(233, 30, 99, 0.06);
-  color: rgba(27, 27, 27, 0.74);
-  font-weight: 950;
+  color: rgba(25, 25, 25, 0.74);
+  font-weight: 650;
 }
 
 .stepText {
-  font-weight: 900;
-  color: rgba(27, 27, 27, 0.72);
+  font-weight: 600;
+  color: rgba(25, 25, 25, 0.72);
 }
 
 .stepLine {
@@ -86,12 +87,12 @@
   background: linear-gradient(135deg, #c2185b, #e91e63);
   color: #fff;
   border-color: rgba(233, 30, 99, 0.18);
-  box-shadow: 0 18px 40px rgba(233, 30, 99, 0.22);
+  box-shadow: 0 18px 40px rgba(233, 30, 99, 0.18);
 }
 
 .stepActive .stepText {
   color: #c2185b;
-  font-weight: 950;
+  font-weight: 700;
 }
 
 /* Body */
@@ -119,7 +120,7 @@
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  font-weight: 950;
+  font-weight: 800;
   letter-spacing: -0.03em;
   color: #c2185b;
 
@@ -169,22 +170,22 @@
   align-items: baseline;
   justify-content: space-between;
   gap: 12px;
-  font-weight: 900;
+  font-weight: 600;
 }
 
 .k {
-  color: rgba(27, 27, 27, 0.62);
+  color: rgba(25, 25, 25, 0.62);
 }
 
 .vStrong {
-  color: rgba(27, 27, 27, 0.86);
-  font-weight: 980;
+  color: rgba(25, 25, 25, 0.86);
+  font-weight: 800;
   letter-spacing: -0.02em;
 }
 
 .vPink {
   color: #c2185b;
-  font-weight: 980;
+  font-weight: 850;
   letter-spacing: -0.02em;
 }
 
@@ -197,7 +198,7 @@
 }
 
 .paymentTitle {
-  font-weight: 950;
+  font-weight: 800;
   color: #c2185b;
   letter-spacing: -0.03em;
   margin-bottom: 10px;
@@ -207,26 +208,27 @@
   display: flex;
   gap: 10px;
   padding: 4px 0;
-  font-weight: 850;
-  color: rgba(27, 27, 27, 0.78);
+  font-weight: 550;
+  color: rgba(25, 25, 25, 0.78);
 }
 
 .k2 {
   width: 130px;
-  color: rgba(27, 27, 27, 0.58);
-  font-weight: 900;
+  color: rgba(25, 25, 25, 0.58);
+  font-weight: 650;
 }
 
 .paymentHint {
   margin-top: 10px;
-  color: rgba(27, 27, 27, 0.72);
-  font-weight: 650;
+  color: rgba(25, 25, 25, 0.72);
+  font-weight: 450;
+  line-height: 1.6;
 }
 
 .receiptBlock {
   border-radius: 18px;
   border: 1px solid rgba(194, 24, 91, 0.12);
-  background: rgba(255, 255, 255, 0.72);
+  background: rgba(255, 255, 255, 0.78);
   padding: 14px;
   margin-bottom: 12px;
 }
@@ -235,8 +237,8 @@
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  font-weight: 950;
-  color: rgba(27, 27, 27, 0.86);
+  font-weight: 750;
+  color: rgba(25, 25, 25, 0.86);
   letter-spacing: -0.03em;
   margin-bottom: 10px;
 }
@@ -247,14 +249,15 @@
   border-radius: 14px;
   border: 1px solid rgba(233, 30, 99, 0.20);
   background: rgba(233, 30, 99, 0.06);
-  color: rgba(27, 27, 27, 0.75);
-  font-weight: 800;
+  color: rgba(25, 25, 25, 0.75);
+  font-weight: 550;
 }
 
 .receiptNote {
   margin-top: 10px;
-  color: rgba(27, 27, 27, 0.68);
-  font-weight: 650;
+  color: rgba(25, 25, 25, 0.68);
+  font-weight: 450;
+  line-height: 1.6;
 }
 
 .receiptPreview {
@@ -267,7 +270,7 @@
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  font-weight: 950;
+  font-weight: 750;
   color: #c2185b;
 }
 
@@ -286,8 +289,9 @@
 
 .afterNote {
   margin-top: 12px;
-  color: rgba(27, 27, 27, 0.70);
-  font-weight: 650;
+  color: rgba(25, 25, 25, 0.70);
+  font-weight: 450;
+  line-height: 1.6;
 }
 
 /* Right summary */
@@ -296,9 +300,9 @@
 }
 
 .summaryTitle {
-  font-weight: 950;
+  font-weight: 850;
   letter-spacing: -0.04em;
-  font-size: 1.15rem;
+  font-size: 1.1rem;
 
   padding-bottom: 10px;
   border-bottom: 1px solid rgba(194, 24, 91, 0.10);
@@ -319,7 +323,7 @@
   padding: 10px;
   border-radius: 16px;
   border: 1px solid rgba(194, 24, 91, 0.12);
-  background: rgba(255, 255, 255, 0.72);
+  background: rgba(255, 255, 255, 0.78);
 }
 
 .sumImg {
@@ -341,20 +345,21 @@
 }
 
 .sumName {
-  font-weight: 950;
+  font-weight: 750;
   letter-spacing: -0.03em;
   margin-bottom: 4px;
 }
 
 .sumMeta {
-  color: rgba(27, 27, 27, 0.68);
-  font-weight: 750;
-  font-size: 0.9rem;
+  color: rgba(25, 25, 25, 0.68);
+  font-weight: 450;
+  font-size: 0.92rem;
+  line-height: 1.45;
 }
 
 .sumPrice {
-  font-weight: 950;
-  color: rgba(27, 27, 27, 0.82);
+  font-weight: 700;
+  color: rgba(25, 25, 25, 0.82);
 }
 
 .sumLine {
@@ -363,23 +368,24 @@
   justify-content: space-between;
   gap: 12px;
   padding: 8px 0;
-  font-weight: 850;
+  font-weight: 550;
 }
 
 .kStrong {
-  color: rgba(27, 27, 27, 0.78);
-  font-weight: 950;
+  color: rgba(25, 25, 25, 0.78);
+  font-weight: 750;
 }
 
 .v {
-  color: rgba(27, 27, 27, 0.82);
-  font-weight: 950;
+  color: rgba(25, 25, 25, 0.82);
+  font-weight: 650;
 }
 
 .sumNote {
   margin-top: 8px;
-  color: rgba(27, 27, 27, 0.68);
-  font-weight: 650;
+  color: rgba(25, 25, 25, 0.68);
+  font-weight: 450;
+  line-height: 1.6;
 }
 
 /* Notices */
@@ -394,14 +400,15 @@
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  font-weight: 950;
+  font-weight: 800;
   letter-spacing: -0.03em;
-  color: rgba(27, 27, 27, 0.90);
+  color: rgba(25, 25, 25, 0.90);
 }
 
 .noticeText {
-  color: rgba(27, 27, 27, 0.72);
-  font-weight: 650;
+  color: rgba(25, 25, 25, 0.72);
+  font-weight: 450;
+  line-height: 1.6;
 }
 
 .noticeCtas {
@@ -431,5 +438,41 @@
   }
   .receiptImgWrap {
     height: 260px;
+  }
+}
+
+@media (max-width: 520px) {
+  .hero {
+    padding: 22px 0 12px;
+  }
+
+  .h1 {
+    font-size: clamp(1.65rem, 7vw, 2.1rem);
+  }
+
+  .stepper {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .stepLine {
+    display: none;
+  }
+
+  .panel {
+    padding: 12px;
+  }
+
+  .summary {
+    padding: 12px;
+  }
+
+  .summaryItem {
+    grid-template-columns: 52px 1fr auto;
+  }
+
+  .sumImg {
+    width: 52px;
+    height: 52px;
   }
 }
